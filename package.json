@@ -1,0 +1,17 @@
+{
+  "name": "vue-cli-plugin-notify",
+  "version": "0.0.4",
+  "description": "Vue-cli-3 plugin: notify",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+  },
+  "keywords": [
+    "api",
+    "vue-cli-plugin",
+    "vue",
+    "plugin"
+  ],
+  "author": "Mike Jian Xu",
+  "license": "MIT"
+}
