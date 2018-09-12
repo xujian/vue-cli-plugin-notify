@@ -79,4 +79,4 @@ let notify = {
   }
 }
 
-export default nofity
+export default notify
