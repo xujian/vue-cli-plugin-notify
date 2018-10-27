@@ -1,10 +1,16 @@
 let __config = {
-  providers: {}
+  providers: {
+    modal: null,
+    notice: null,
+    dialog: null
+  },
+  bus: null
 }
 
 let notify = {
-  setup: ({providers}) => {
+  setup: ({providers, $bus}) => {
     __config.providers = providers
+    __config.$bus = $bus
   },
   data () {
     return {
@@ -24,33 +30,36 @@ let notify = {
         console.log('No notice provider defined', 'notice()')
       }
     },
-    confirm ({text, data, routeName, action, methods}) {
-      this.$q.dialog({
-        title: '提示',
-        message: text,
-        ok: '确定',
-        preventClose: true,
-        cancel: '取消'
-      }).then(() => { // 点击确认
-        methods(data)
-      }).catch(() => { // 点击取消
-        this.notice('已取消')
-      })
+    confirm ({message, options}) {
+      if (__config.providers.dialog) {
+        return __config.providers.dialog.make({message: message, optoins: options})
+      } else {
+        console.log('No notice provider defined')
+      }
     },
-    modal (view, data) {
+    modal (view, options) {
+      options = options || {}
+      if (__config.providers.modal) {
+        __config.providers.modal.make(view, {
+            title: options.title || '对话框'
+          }
+        )
+      } else {
+        console.log('No notice provider defined', 'notice()')
+      }
       this.$bus.$emit('notify.modal', {
         view,
-        data
+        options
       })
     },
     spinner () {
-      this.$bus.$emit('spinner')
+      __config.$bus && __config.$bus.emit('spinner')
     },
     unspinner () {
-      this.$bus.$emit('unspinner')
+      __config.$bus && __config.$bus.emit('unspinner')
     },
     login (data) {
-      this.$bus.$emit('login.required', data)
+      __config.$bus && __config.$bus.emit('login.required', data)
     },
     pane ({_update, ...data}) {
     }
